@@ -23,13 +23,13 @@ class SpecialRank(Enum):
 # ----------------------------------------------------
 
 def _convert_str_to_list(string: str) -> list:
-    integer = ""
+    integer = "" # rank 
     li = []
     for ch in string:
         try:
-            if int(ch):
+            if int(ch): # if character can be turned into an int type then it is a rank rather than a suite type
                 integer += ch
-        except ValueError:
+        except ValueError: # character is not a int so it can either be a suite type or a special rank
             li.append(ch)
     li.insert(0, int(integer))
     return li
@@ -40,7 +40,7 @@ class Card:
     def __init__(self, rank: Union[int, SpecialRank, str], suite: Optional[CardSuites] = None):
         self.rank = rank
         if not isinstance(rank, str) and suite is not None:
-            self.suite = suite.name[:-(len(suite.name) - 1)]
+            self.suite = suite.name[:-(len(suite.name) - 1)] # string splicing to only get the first character
         self._check_rank()
 
 
@@ -53,13 +53,13 @@ class Card:
             # 2) if self.rank is an integer, then this check will check if the integer matches one of the values
             # within the attributes of SpecialRank
             for special in SpecialRank:
-                if self.rank == special.value:
+                if self.rank == special.value: # checks if self.rank matches the current iterated special rank
                     self.rank = special.name[:-(len(special.name) -1)]
 
     def _check_without_suite(self):
-        li = _convert_str_to_list(self.rank)
-        for special in SpecialRank:
-            if li[0] == special.value:
+        li = _convert_str_to_list(self.rank) # turn into list for clearer values
+        for special in SpecialRank: # identical to _check_with_suite for loop
+            if li[0] == special.value: # except li[0] is the rank and thus checks if the rank is equal to the value of the current iterated special rank
                 li[0] = special.name[:-(len(special.name) - 1)]
         
         self.rank = f"{li[0]}"
@@ -67,8 +67,10 @@ class Card:
 
     def _check_rank(self):
         if isinstance(self.rank, str):
+            # If self.rank is a string the self.suite is not defined yet and must be defined thus check_without_suite
             self._check_without_suite()
         else:
+            # if self.rank is either int or SpecialRank type and thus self.suite is defined
             self._check_with_suite()
 
     def get_rank(self):

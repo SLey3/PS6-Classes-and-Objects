@@ -42,7 +42,9 @@ def draw_train():
 
     gw = GWindow(GWINDOW_WIDTH, GWINDOW_HEIGHT)
     train = Train()
+    train.append(Engine("Black"))
     train.append(Boxcar("Green"))
+    train.append(Caboose("Red"))
     x = (gw.get_width() - train.get_width()) / 2
     y = gw.get_height()
     gw.add(train, x, y)
@@ -86,6 +88,32 @@ class Boxcar(TrainCar):
         y = -(CAR_BASELINE + DOOR_HEIGHT)
         self.add(GRect(x - DOOR_WIDTH, y, DOOR_WIDTH, DOOR_HEIGHT))
         self.add(GRect(x, y, DOOR_WIDTH, DOOR_HEIGHT))
+
+class Engine(TrainCar):
+    def __init__(self, color):
+        super().__init__(color)
+        x = CONNECTOR + CAB_WIDTH / 2
+        y = -(CAR_BASELINE + CAR_HEIGHT)
+        smoke_stack = GRect(x - SMOKESTACK_INSET, y - SMOKESTACK_HEIGHT, SMOKESTACK_WIDTH, SMOKESTACK_HEIGHT)
+        smoke_stack.set_color(color)
+        smoke_stack.set_filled(True)
+        back_sec = GRect(x + SMOKESTACK_INSET*2.5 + CONNECTOR - 2, y - SMOKESTACK_HEIGHT, CUPOLA_WIDTH, CUPOLA_HEIGHT)
+        back_sec.set_color(color)
+        back_sec.set_filled(True)
+        
+        self.add(smoke_stack)
+        self.add(back_sec)
+
+class Caboose(TrainCar):
+    def __init__(self, color):
+        super().__init__(color)
+        x = CONNECTOR + CAR_WIDTH / 2
+        y = -(CAR_BASELINE + CAR_HEIGHT)
+
+        cupula = GRect(x - CUPOLA_WIDTH/2, y - CUPOLA_HEIGHT, CUPOLA_WIDTH, CUPOLA_HEIGHT)
+        cupula.set_color(color)
+        cupula.set_filled(True)
+        self.add(cupula)
 
 # Startup code
 
